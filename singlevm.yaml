@@ -15,7 +15,7 @@
       password: "{{ vcenter_pass }}"
       validate_certs: False
       name: web05
-      template: K-ansible
+      template: DM-CENTOS
       datacenter: "{{ datacenter_name }}"
       folder: /{{ datacenter_name }}/vm
       #      cluster: "{{ cluster_name }}"
