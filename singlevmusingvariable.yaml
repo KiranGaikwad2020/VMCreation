@@ -1,0 +1,43 @@
+---
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  vars:
+    vcenter_server: "192.168.30.15"
+    vcenter_user: "Administrator@vsphere.local"
+    vcenter_pass: "Datamato@123"
+    datacenter_name: "Datamato"
+    #    cluster_name: "Cluster"
+  tasks:
+  - name: Clone the template
+    vmware_guest:
+      hostname: "{{ vcenter_server }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      validate_certs: False
+      name: web02
+      template: Terraform-Template
+      datacenter: "{{ datacenter_name }}"
+      folder: /{{ datacenter_name }}/vm
+      #      cluster: "{{ cluster_name }}"
+      resource_pool: resourcepool_dm
+      datastore: "datastore1"
+      networks:
+      - name: VM Network
+        device_type: vmxnet3
+        ip: 192.168.30.220
+        netmask: 255.255.255.0
+        gateway: 192.168.30.1
+        type: static
+        dns_servers:
+        - 192.168.30.1
+        - 192.168.30.2
+          #      customization:
+          #hostname: "web02"
+          #dns_servers:
+          #- 192.168.30.1
+          #- 192.168.30.2
+          #- 1.1.1.1
+      state: poweredon
+      wait_for_ip_address: yes
+    delegate_to: localhost
